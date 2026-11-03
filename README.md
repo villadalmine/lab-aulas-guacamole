@@ -8,11 +8,22 @@ Probado: pila Docker, escritorio XFCE en navegador con teclado, SSH/RDP, permiso
 
 **Empezar:** [tutorial de la primera clase, incluido el acceso del alumno](docs/01-tutorial.md).
 
-## Demostración de terminal
+## Mirá cómo se accede
+
+La demostración se reproduce automáticamente aquí, en bucle: acceso a Guacamole → escritorio XFCE → Grafana. No necesitás descargar nada. Es una secuencia de capturas reales de la prueba.
+
+![Demostración automática: acceso, escritorio y Grafana](docs/media/recorrido.gif)
+
+### Prueba real desde la terminal
 
 ![Prueba real del laboratorio: login, SSH/RDP, Grafana y Prometheus](docs/media/demo.gif)
 
-[Grabación asciinema v2](docs/media/demo.cast): descargar y reproducir con `asciinema play demo.cast`. El GIF resume salidas de comandos ejecutados; no es una grabación del escritorio gráfico. Para regenerar la captura en el laboratorio nuevo usar `python3 scripts/grabar-demo.py` con los componentes de observabilidad activos.
+<details>
+<summary>Descarga opcional y cómo regenerar la captura</summary>
+
+[Descargar la grabación asciinema v2](docs/media/demo.cast) para reproducirla con `asciinema play demo.cast`. La animación de terminal resume salidas reales; no es vídeo del escritorio. Para regenerar el cast: `python3 scripts/grabar-demo.py`, con la observabilidad activa.
+
+</details>
 
 [Borrador de publicación para LinkedIn](docs/POST-LINKEDIN.md).
 

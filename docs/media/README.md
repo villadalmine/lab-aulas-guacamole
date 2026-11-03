@@ -7,3 +7,5 @@
 - `grafana.png`: dashboard real con indicador 1 y gráfica de latencia.
 
 No contienen contraseñas ni datos de alumnos reales. Los identificadores de contenedor y horarios corresponden al entorno efímero de la prueba. La animación de terminal no se presenta como vídeo del escritorio.
+
+- `recorrido.gif`: secuencia automática en bucle de las capturas reales de acceso, escritorio y Grafana; no es una grabación continua de interacción.
