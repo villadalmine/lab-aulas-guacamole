@@ -8,30 +8,26 @@ Probado: pila Docker, escritorio XFCE en navegador con teclado, SSH/RDP, permiso
 
 **Empezar:** [tutorial de la primera clase, incluido el acceso del alumno](docs/01-tutorial.md).
 
-## Mirá cómo se accede
+## Acceso real desde el navegador
 
-La demostración se reproduce automáticamente aquí, en bucle: acceso a Guacamole → escritorio XFCE → Grafana. No necesitás descargar nada. Es una secuencia de capturas reales de la prueba.
+Capturas directas del navegador durante una sesión real: login de `alumno-demo`, selección de su máquina, apertura del escritorio XFCE y comandos ejecutados en la terminal. La secuencia se reproduce automáticamente, sin marcos ni textos añadidos sobre las pantallas.
 
-![Demostración automática: acceso, escritorio y Grafana](docs/media/recorrido.gif)
+![Login y acceso real a la máquina desde Guacamole](docs/media/acceso-real.gif)
 
-### Prueba real desde la terminal
+### Grafana en vivo
 
-![Prueba real del laboratorio: login, SSH/RDP, Grafana y Prometheus](docs/media/demo.gif)
+Captura directa del dashboard: disponibilidad HTTP del portal y latencia observada por Prometheus.
+
+![Dashboard real de Grafana](docs/media/browser-real/06-grafana.jpg)
 
 <details>
-<summary>Descarga opcional y cómo regenerar la captura</summary>
+<summary>Capturas originales y prueba de terminal (descarga opcional)</summary>
 
-[Descargar la grabación asciinema v2](docs/media/demo.cast) para reproducirla con `asciinema play demo.cast`. La animación de terminal resume salidas reales; no es vídeo del escritorio. Para regenerar el cast: `python3 scripts/grabar-demo.py`, con la observabilidad activa.
+[Login](docs/media/browser-real/01-login.jpg) · [Conexiones del alumno](docs/media/browser-real/03-conexiones.jpg) · [Escritorio](docs/media/browser-real/04-escritorio.jpg) · [Terminal](docs/media/browser-real/05-terminal.jpg).
+
+[Grabación asciinema de las pruebas](docs/media/demo.cast), reproducible con `asciinema play demo.cast`. Para regenerarla: `python3 scripts/grabar-demo.py`, con observabilidad activa. El GIF superior es una secuencia de capturas directas de los pasos, no un vídeo continuo.
 
 </details>
-
-Captura real del escritorio XFCE abierto desde Guacamole y `whoami` ejecutado con el teclado del navegador:
-
-![Escritorio remoto probado](docs/media/escritorio-rdp.png)
-
-Dashboard real con `probe_success=1` y latencia HTTP:
-
-![Dashboard Grafana probado](docs/media/grafana.png)
 
 ## Certificados y panel docente
 
@@ -115,9 +111,5 @@ docker compose -f compose.yaml -f compose.caddy.yaml -f compose.haproxy.yaml --p
 ```
 
 Usar el mismo conjunto de `-f` al operar cada instalación. Puertos publicados solo en loopback. Para paneles remotos agregar los respectivos `-L` al túnel SSH. TLS interno no equivale a certificado público: ver [publicación](docs/06-proxies.md).
-
-## Continuidad
-
-[Plan e hitos](docs/HITOS.md), [retomar desde Fedora](docs/CONTINUIDAD.md), [AGENTS.md](AGENTS.md) y [skill portable](skills/lab-aulas/SKILL.md). GitHub es la fuente compartida; `.env` y datos de alumnos no van en Git.
 
 El código y textos propios se publican bajo MIT; imágenes y programas mantienen sus licencias. Para alumnos no confiables con sudo/root, preferir VMs y segmentación. [Fuentes oficiales](docs/FUENTES.md).

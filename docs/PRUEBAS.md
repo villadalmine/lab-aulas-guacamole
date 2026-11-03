@@ -16,8 +16,8 @@ Prueba real en Fedora Linux amd64, Docker rootless 28.3.3, Compose 2.39.1 y driv
 | OliveTin 3000.21.0 | Portal 200; dos llamadas StartActionAndWait: estado HTTP 200 y hora UTC, ambas salida 0 |
 | Caddy 2.10.2 | Certificado localhost generado por CA interna; curl con CA validada responde 200; login y SSH/RDP por HTTPS pasan |
 | HAProxy 3.2-alpine | TCP/SNI hacia Caddy, HTTPS con CA validada responde 200; login y SSH/RDP a través del proxy pasan |
-| Captura reproducible | `docs/media/demo.cast`, salidas reales de scripts/grabar-demo.py; GIF derivado de ellas |
-| Evidencia visual | `docs/media/escritorio-rdp.png`: terminal real con whoami; no contiene claves |
+| Captura reproducible | `docs/media/demo.cast`, salidas reales de scripts/grabar-demo.py; salidas capturadas y GIF del acceso real desde navegador |
+| Evidencia visual | `docs/media/escritorio-rdp.jpg`: terminal real con whoami; no contiene claves |
 
 ## Correcciones surgidas de la prueba
 
@@ -35,4 +35,3 @@ Había capacidad libre, pero crear el proyecto aislado `docente-guia-20261103` q
 
 La pila Docker mínima y sus extensiones indicadas arriba están probadas. Quedan fuera: aprovisionamiento automático de VMs o escritorios desde OliveTin, PROXYv2, certificados ACME públicos, prueba de carga multiusuario y reproducción en otro host. El portapapeles/transferencia de archivos y audio no se certifican por estas pruebas.
 
-Se deja la demo Docker activa para la revisión solicitada por Rino, con publicaciones loopback y túnel SSH temporal desde su PC. No es un servicio de producción. Claves efímeras entregadas por chat, nunca en Git. Ver CONTINUIDAD para detener solo estos recursos y conservar datos.
