@@ -1,0 +1,6 @@
+services:
+  haproxy:
+    image: haproxy:3.2-alpine
+    ports: ['127.0.0.1:19443:443']
+    volumes: ['./proxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro']
+    networks: [backend]

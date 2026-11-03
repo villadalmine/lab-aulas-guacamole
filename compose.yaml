@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16.11
+    environment:
+      POSTGRES_DB: guacamole
+      POSTGRES_USER: guacamole
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ejecutar scripts/preparar.sh}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U guacamole -d guacamole]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks: [backend]
+    restart: unless-stopped
+  guacd:
+    image: guacamole/guacd:${GUACAMOLE_VERSION:-1.6.0}
+    networks: [backend, aulas]
+    restart: unless-stopped
+  guacamole:
+    image: guacamole/guacamole:${GUACAMOLE_VERSION:-1.6.0}
+    environment:
+      GUACD_HOSTNAME: guacd
+      POSTGRESQL_ENABLED: 'true'
+      POSTGRESQL_HOSTNAME: postgres
+      POSTGRESQL_DATABASE: guacamole
+      POSTGRESQL_USERNAME: guacamole
+      POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      postgres: {condition: service_healthy}
+      guacd: {condition: service_started}
+    ports: ['127.0.0.1:18080:8080']
+    networks: [backend]
+    restart: unless-stopped
+  escritorio:
+    profiles: [escritorio]
+    build: ./desktop
+    environment:
+      DESKTOP_PASSWORD: ${DESKTOP_PASSWORD}
+    volumes: [home_alumno:/home/alumno]
+    shm_size: 512mb
+    mem_limit: 2g
+    cpus: 2
+    networks: [aulas]
+    restart: unless-stopped
+volumes:
+  pgdata:
+  home_alumno:
+networks:
+  backend:
+  aulas:

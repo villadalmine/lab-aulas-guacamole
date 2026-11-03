@@ -1,0 +1,12 @@
+services:
+  caddy:
+    image: caddy:2.10.2
+    ports: ['127.0.0.1:18443:443']
+    volumes:
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [backend]
+volumes:
+  caddy_data:
+  caddy_config:

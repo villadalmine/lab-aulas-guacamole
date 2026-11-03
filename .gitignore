@@ -1,0 +1,7 @@
+.env
+secrets/
+initdb/*.sql
+backups/
+*.pem
+*.key
+__pycache__/
