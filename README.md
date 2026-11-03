@@ -25,8 +25,6 @@ La demostración se reproduce automáticamente aquí, en bucle: acceso a Guacamo
 
 </details>
 
-[Borrador de publicación para LinkedIn](docs/POST-LINKEDIN.md).
-
 Captura real del escritorio XFCE abierto desde Guacamole y `whoami` ejecutado con el teclado del navegador:
 
 ![Escritorio remoto probado](docs/media/escritorio-rdp.png)

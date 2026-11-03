@@ -9,7 +9,7 @@
 | H5 OliveTin | Inicio y acción fija ejecutada | dos acciones aprobadas |
 | H6 Proxies | Caddy HTTPS y HAProxy SNI | aprobado; CA validada y túneles SSH/RDP |
 | H7 Incus | Crear VM aislada | creación de proyecto bloqueada; no probado |
-| H8 Entrega | GitHub, evidencia y continuidad | completo: GitHub, tutorial, medios, post y continuidad |
+| H8 Entrega | GitHub, evidencia y continuidad | completo: GitHub, tutorial, medios y continuidad |
 
 Actualizar solo con resultados reales. Ver PRUEBAS.md.
 
