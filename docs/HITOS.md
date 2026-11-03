@@ -9,6 +9,6 @@
 | H5 OliveTin | Inicio y acción fija ejecutada | pendiente |
 | H6 Proxies | Caddy HTTPS y HAProxy SNI | pendiente |
 | H7 Incus | Crear VM aislada | creación de proyecto bloqueada; no probado |
-| H8 Entrega | GitHub, evidencia y continuidad | pendiente |
+| H8 Entrega | GitHub, evidencia y continuidad | GitHub público y continuidad listos; evidencia en curso |
 
 Actualizar solo con resultados reales. Ver PRUEBAS.md.

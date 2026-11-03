@@ -1,9 +1,11 @@
 listenAddressSingleHTTPFrontend: 0.0.0.0:1337
 actions:
   - title: Estado Guacamole HTTP
+    id: estado-guacamole
     icon: '<iconify-icon icon="mdi:heart-pulse"></iconify-icon>'
     exec: ["curl", "--fail", "--silent", "--show-error", "--output", "/dev/null", "--write-out", "HTTP %{http_code}\n", "http://guacamole:8080/guacamole/"]
     timeout: 10
   - title: Hora del panel
+    id: hora-panel
     exec: ["date", "-u"]
     timeout: 5

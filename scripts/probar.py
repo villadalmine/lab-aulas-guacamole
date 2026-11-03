@@ -5,13 +5,16 @@ import hashlib
 import json
 import os
 import socket
+import ssl
 import struct
 import time
 import urllib.parse
 import urllib.request
+import uuid
 from pathlib import Path
 
 BASE = os.environ.get('LAB_URL', 'http://127.0.0.1:18080/guacamole')
+TLS = ssl.create_default_context(cafile=os.environ.get('LAB_CA_FILE'))
 env = dict(line.split('=', 1) for line in Path('.env').read_text().splitlines()
            if line and not line.startswith('#') and '=' in line)
 
@@ -26,7 +29,7 @@ def api(path, method='GET', body=None, token=None):
         body = body.encode()
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
     req = urllib.request.Request(BASE + path, data=body, headers=headers, method=method)
-    with urllib.request.urlopen(req, timeout=20) as response:
+    with urllib.request.urlopen(req, timeout=20, context=TLS) as response:
         raw = response.read()
         return json.loads(raw) if raw else None
 
@@ -36,9 +39,11 @@ def instruction(op, *args):
 class WS:
     def __init__(self, path):
         url = urllib.parse.urlsplit(BASE)
-        if url.scheme != 'http':
-            raise RuntimeError('Prueba de túnel local requiere URL http; TLS se valida aparte')
-        self.s = socket.create_connection((url.hostname, url.port or 80), timeout=15)
+        if url.scheme not in ('http', 'https'):
+            raise RuntimeError('URL debe ser http o https')
+        self.s = socket.create_connection((url.hostname, url.port or (443 if url.scheme == 'https' else 80)), timeout=15)
+        if url.scheme == 'https':
+            self.s = TLS.wrap_socket(self.s, server_hostname=url.hostname)
         self.s.settimeout(10)
         key = base64.b64encode(os.urandom(16)).decode()
         req = (f'GET {url.path}{path} HTTP/1.1\r\nHost: {url.netloc}\r\n'
@@ -90,12 +95,13 @@ def main():
     token = auth['authToken']
     ds = auth['dataSource']
     results = {'login': True, 'ssh_tunnel': False, 'rdp_tunnel': False}
+    run_id = uuid.uuid4().hex[:8]
     for protocol, port in [('ssh', '22'), ('rdp', '3389')]:
         params = {'hostname': 'escritorio', 'port': port, 'username': 'alumno', 'password': env['DESKTOP_PASSWORD']}
         if protocol == 'rdp':
             params.update({'security': 'rdp', 'ignore-cert': 'true', 'enable-wallpaper': 'false'})
         conn = api(f'/api/session/data/{ds}/connections', 'POST',
-                   {'parentIdentifier': 'ROOT', 'name': 'Prueba-' + protocol, 'protocol': protocol,
+                   {'parentIdentifier': 'ROOT', 'name': 'Prueba-' + protocol + '-' + run_id, 'protocol': protocol,
                     'parameters': params, 'attributes': {}}, token)
         query = urllib.parse.urlencode({'token': token, 'GUAC_DATA_SOURCE': ds, 'GUAC_ID': conn['identifier'],
                                        'GUAC_TYPE': 'c', 'GUAC_WIDTH': '1024', 'GUAC_HEIGHT': '768', 'GUAC_DPI': '96'})
@@ -117,13 +123,28 @@ def main():
                 break
         results[protocol + '_tunnel'] = connected
         if connected and protocol == 'ssh':
+            # El primer dibujo puede preceder a la autenticación SSH.
+            def pump(seconds):
+                import re
+                until = time.monotonic() + seconds
+                ws.s.settimeout(0.5)
+                while time.monotonic() < until:
+                    try:
+                        frame = ws.recv()
+                    except socket.timeout:
+                        continue
+                    for stamp in re.findall(rb'4\.sync,\d+\.([0-9]+);', frame):
+                        ws.send(instruction('sync', stamp.decode()))
+            pump(4)
             for char in 'touch /tmp/guac-ssh-ok':
                 ws.send(instruction('key', ord(char), 1))
                 ws.send(instruction('key', ord(char), 0))
             ws.send(instruction('key', 65293, 1))
             ws.send(instruction('key', 65293, 0))
-            time.sleep(2)
+            pump(3)
+        ws.send(b'', 8)
         ws.s.close()
+        api(f"/api/session/data/{ds}/connections/{conn['identifier']}", 'DELETE', token=token)
     api('/api/tokens/' + urllib.parse.quote(token, safe=''), 'DELETE')
     Path('resultado-prueba.json').write_text(json.dumps(results, indent=2))
     print(json.dumps(results))

@@ -23,5 +23,7 @@ if [[ ! -s initdb/001-guacamole.sql ]]; then
   test -s initdb/001-guacamole.sql.tmp
   mv initdb/001-guacamole.sql.tmp initdb/001-guacamole.sql
 fi
+chmod 755 initdb
+chmod 644 initdb/001-guacamole.sql
 docker compose config --quiet
 printf 'Preparado. Ejecutar: docker compose --profile escritorio up -d --build\n'

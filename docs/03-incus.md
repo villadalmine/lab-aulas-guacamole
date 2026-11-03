@@ -29,6 +29,25 @@ Para escritorio, instalar `xfce4 xrdp xorgxrdp dbus-x11`, configurar `~alumno/.x
 
 Crear una VM `aula-docker` de 4 CPU / 6 GB / 20 GB, instalar Docker y clonar el repo dentro. Evita instalar Docker en el host Incus y no requiere `security.nesting` en un contenedor de sistema.
 
+En un host nuevo, con el perfil y bridge ya preparados:
+
+```bash
+incus launch images:ubuntu/24.04/cloud aula-docker --vm \
+  -c limits.cpu=4 -c limits.memory=6GiB -d root,size=20GiB
+incus exec aula-docker -- cloud-init status --wait
+incus exec aula-docker -- apt-get update
+incus exec aula-docker -- apt-get install -y docker.io docker-compose-v2 git python3
+incus exec aula-docker -- systemctl enable --now docker
+incus exec aula-docker -- bash
+# Ya dentro de la VM:
+git clone https://github.com/villadalmine/lab-aulas-guacamole.git /opt/aulas
+cd /opt/aulas
+bash scripts/preparar.sh
+docker compose --profile escritorio up -d --build
+```
+
+Para acceder desde tu computadora, la publicación sigue siendo loopback **dentro de la VM**. Crear un usuario SSH en ella y usar el túnel de README hacia su IP. Si la VM solo es accesible desde el host Incus, usar `ssh -J usuario@HOST_INCUS -N -L 18080:127.0.0.1:18080 usuario@IP_VM`. No abrir puertos de todos los servicios como atajo.
+
 ```mermaid
 flowchart TD
     B[Imagen pública limpia] --> P[VM de preparación]
