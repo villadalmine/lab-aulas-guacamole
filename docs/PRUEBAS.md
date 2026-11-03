@@ -34,4 +34,3 @@ Había capacidad libre, pero crear el proyecto aislado `docente-guia-20261103` q
 ## Alcance y pendientes
 
 La pila Docker mínima y sus extensiones indicadas arriba están probadas. Quedan fuera: aprovisionamiento automático de VMs o escritorios desde OliveTin, PROXYv2, certificados ACME públicos, prueba de carga multiusuario y reproducción en otro host. El portapapeles/transferencia de archivos y audio no se certifican por estas pruebas.
-
