@@ -39,3 +39,18 @@ docker compose --profile escritorio ps
 En Fedora Atomic usar la ruta real `/var/home/...` como `data-root` del motor: en esta prueba `/home/...` era un symlink y runc lo rechazó. El `.env` de prueba se queda local; jamás copiarlo al NAS público ni a GitHub. Un motor detenido no significa que se hayan eliminado imágenes o volúmenes.
 
 Al terminar guardar evidencia y publicar en GitHub sin `.env`. Detener solo recursos propios; volumenes y backups se retiran con decisión explícita. La baja del usuario Windows es una tarea separada.
+
+## Punto de corte de la entrega
+
+La demo queda activa para revisión. El motor temporal no tiene instalación ni autoarranque permanente: tras reiniciar Fedora, comprobar la unidad antes de asumir que sigue disponible. El túnel temporal de Windows termina al cerrar esa PC; desde Fedora se usan directamente los puertos localhost del README.
+
+Para detener únicamente esta demo, con el entorno del runtime anterior seleccionado:
+
+```bash
+docker compose -f compose.yaml -f compose.observabilidad.yaml \
+  -f compose.olivetin.yaml -f compose.caddy.yaml -f compose.haproxy.yaml \
+  --profile escritorio stop
+systemctl --user stop lab-aulas-dockerd-v2
+```
+
+Esto conserva imágenes, .env y volúmenes para retomar. No ejecutar prune ni borrar directorios de otros motores. El paquete del NAS/GitHub contiene la guía, skill, diagramas y evidencia; las claves y los volúmenes del runtime no se suben.

@@ -22,7 +22,7 @@ def api(path, method='GET', body=None, token=None):
     headers = {}
     if token:
         headers['Guacamole-Token'] = token
-    if isinstance(body, dict):
+    if isinstance(body, (dict, list)):
         body = json.dumps(body).encode()
         headers['Content-Type'] = 'application/json'
     elif isinstance(body, str):

@@ -11,4 +11,4 @@
 - [Caddy reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy)
 - [HAProxy](https://www.haproxy.com/documentation/haproxy-configuration-manual/)
 
-Consultadas2026-11-03. Versiones fijadas enCompose; revisar evidencia antes de actualizar. Textos y configuración propios; sin secretos del lab privado.
+Consultadas el 2026-11-03. Versiones fijadas en Compose; revisar evidencia antes de actualizar. Textos y configuración propios; sin secretos del lab privado.

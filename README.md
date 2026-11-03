@@ -4,6 +4,32 @@ Guía en español para entregar a cada alumno un escritorio o terminal desde el 
 
 **Estado de pruebas:** [evidencia real](docs/PRUEBAS.md). Un portal HTTP sano no prueba una sesión remota. No se incluyen contraseñas ni infraestructura privada del autor.
 
+Probado: pila Docker, escritorio XFCE en navegador con teclado, SSH/RDP, permisos de alumno, persistencia, Grafana/Prometheus, las dos acciones de OliveTin y proxies HTTPS. **Incus sigue pendiente**: el host de prueba bloqueó la creación del proyecto aislado; no se certifica esa receta como ejecutada.
+
+**Empezar:** [tutorial de la primera clase, incluido el acceso del alumno](docs/01-tutorial.md).
+
+## Demostración de terminal
+
+![Prueba real del laboratorio: login, SSH/RDP, Grafana y Prometheus](docs/media/demo.gif)
+
+[Grabación asciinema v2](docs/media/demo.cast): descargar y reproducir con `asciinema play demo.cast`. El GIF resume salidas de comandos ejecutados; no es una grabación del escritorio gráfico. Para regenerar la captura en el laboratorio nuevo usar `python3 scripts/grabar-demo.py` con los componentes de observabilidad activos.
+
+[Borrador de publicación para LinkedIn](docs/POST-LINKEDIN.md).
+
+Captura real del escritorio XFCE abierto desde Guacamole y `whoami` ejecutado con el teclado del navegador:
+
+![Escritorio remoto probado](docs/media/escritorio-rdp.png)
+
+Dashboard real con `probe_success=1` y latencia HTTP:
+
+![Dashboard Grafana probado](docs/media/grafana.png)
+
+## Certificados y panel docente
+
+El portal mínimo usa HTTP en loopback, accesible por túnel SSH. En la etapa HTTPS, **Caddy genera el certificado de `localhost` con su CA interna** y guarda el material en su volumen. El `443` de los archivos es un puerto interno del contenedor: la demo publica `18443` para Caddy y `19443` para HAProxy, ambos solo en localhost. Con un dominio público y los requisitos de ACME cumplidos, Caddy solicita un certificado público. HAProxy TCP no genera ni termina esos certificados.
+
+OliveTin incluye dos acciones de consulta: **Estado Guacamole HTTP** y **Hora del panel**. No crea VMs, no inicia escritorios y no tiene socket Docker/Incus. Docker no impide integrar un controlador Incus, pero esa automatización requiere autorización, inventario y acciones limitadas; no está implementada en esta demo.
+
 ```mermaid
 flowchart LR
     A[Alumno: navegador] --> C[Caddy HTTPS opcional]
